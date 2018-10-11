@@ -54,105 +54,76 @@ def actualizarDisponibles(tablero):
 #datos=actualizarDisponibles(generarTablero(tamañoDeTablero(lista)))
 #for i in datos[0]:
 #	print(*i,sep="|")
-def verificarPosicion(sen,dire,pos,datos,palabra,tam):
+def verificarIntersecciones(signoX,signoY,palabra,pos,datos):
 	m=1
 	b=True
+	while m<len(palabra) and b==True:
+		if signoX=="mas" and signoY=="menos":
+			b=(pos[0]+m,pos[1]-m) in datos[0]
+		elif signoX=="mas" and signoY=="mas":
+			b=(pos[0]+m,pos[1]+m) in datos[0]
+		elif signoX=="menos" and signoY=="mas":
+			b=(pos[0]-m,pos[1]+m) in datos[0]
+		elif signoX=="menos" and signoY=="menos":
+			b=(pos[0]-m,pos[1]-m) in datos[0]
+		elif signoX=="nulo" and signoY=="mas":
+			b=(pos[0],pos[1]+m) in datos[0]
+		elif signoX=="nulo" and signoY=="menos":
+			b=(pos[0],pos[1]-m) in datos[0]
+		elif signoX=="menos" and signoY=="nulo":
+			b=(pos[0]-m,pos[1]) in datos[0]
+		else:
+			b=(pos[0]+m,pos[1]) in datos[0]
+		m=m+1
+	if b==True:
+		return b
+	else:
+		return b
+def verificarPosicion(sen,dire,pos,datos,palabra,tam):
 	if dire==0:
 		if sen==0:
 			if tam-pos[1]>len(palabra):
-				while m<len(palabra) and b==True:
-					b=(pos[0],pos[1]+m) in datos[0]
-					m=m+1
-				if b==True:
-					return b
-				else:
-					return b
+				return verificarIntersecciones("nulo","mas",palabra,pos,datos)
 			else:
 				return False
 		else:
 			if pos[1]>len(palabra):
-				while m<len(palabra) and b==True:
-					b=(pos[0],pos[1]-m) in datos[0]
-					m=m+1
-				if b==True:
-					return b
-				else:
-					return b
+				return verificarIntersecciones("nulo","menos",palabra,pos,datos)
 			else:
 				return False		
 	elif dire==1:
 		if sen==0:
 			if tam-pos[0]>len(palabra):
-				
-				while m<len(palabra) and b==True:
-					b=(pos[0]+m,pos[1]) in datos[0]
-					m=m+1
-				if b==True:
-					return b
-				else:
-					return b
+				return verificarIntersecciones("mas","nulo",palabra,pos,datos)
 			else:
 				return False
 		else:
 			if pos[0]>len(palabra):
-				while m<len(palabra) and b==True:
-					b=(pos[0]-m,pos[1]) in datos[0]
-					m=m+1
-				if b==True:
-					return b
-				else:
-					return b
+				return verificarIntersecciones("menos","nulo",palabra,pos,datos)
 			else:
 				return False		
 		
 	elif dire==2:
 		if sen==0:
 			if tam-pos[0]>len(palabra) and tam-pos[1]>len(palabra):
-				
-				while m<len(palabra) and b==True:
-					b=(pos[0]+m,pos[1]+m) in datos[0]
-					m=m+1
-				if b==True:
-					return b
-				else:
-					return b
+				return verificarIntersecciones("mas","mas",palabra,pos,datos)
 			else:
 				return False
 		else:
 			if pos[0]>len(palabra) and pos[1]>len(palabra):
-				
-				while m<len(palabra) and b==True:
-					b=(pos[0]-m,pos[1]-m) in datos[0]
-					m=m+1
-				if b==True:
-					return b
-				else:
-					return b
+				return verificarIntersecciones("menos","menos",palabra,pos,datos)
 			else:
 				return False		
 				
 	else:
 		if sen==0:
 			if pos[0]>len(palabra) and tam-pos[1]>len(palabra):
-			
-				while m<len(palabra) and b==True:
-					b=(pos[0]-m,pos[1]+m) in datos[0]
-					m=m+1
-				if b==True:
-					return b
-				else:
-					return b
+				return verificarIntersecciones("menos","mas",palabra,pos,datos)
 			else:
 				return False
 		else:
 			if tam-pos[0]>len(palabra) and pos[1]>len(palabra):
-				while m<len(palabra) and b==True:
-					b=(pos[0]+m,pos[1]-m) in datos[0]
-					m=m+1
-				if b==True:
-					return b
-				else:
-					return b
+				return verificarIntersecciones("mas","menos",palabra,pos,datos)
 			else:
 				return False		
 							
@@ -247,4 +218,3 @@ def sopaDeLetras(lista):
 		print(*i,sep="|")
 
 sopaDeLetras(lista)
-
