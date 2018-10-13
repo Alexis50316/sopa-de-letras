@@ -175,11 +175,6 @@ def crearSopaDeLetras(lista,tablero):
 		tablero=agregarPalabra(tablero,x)
 	return tablero
 
-datos=generarTablero(tamañoDeTablero(lista))
-nose1=crearSopaDeLetras(lista,datos)
-for i in nose1:
-	print(*i,sep="|")
-
 def letraAlAzar():
 	lista=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 	if len(lista)==1:
@@ -202,6 +197,10 @@ def sopaDeLetras(lista):
 	tablero=generarTablero(tam)
 	tableroconpalabras=crearSopaDeLetras(lista,tablero)
 	tablerocompleto=rellenarTablero(tableroconpalabras)
+	print('Palabras:')
+	for i in lista:
+		print(i)
+	print(' ')
 	for i in tablerocompleto:
 		print(*i,sep="|")
 
