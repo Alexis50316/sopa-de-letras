@@ -35,8 +35,6 @@ def generarTablero(tamaño):
 		for j in range(tamaño):
 			l[i].append(" ")
 	return l
-#for i in generarTablero(tamañoDeTablero(lista)):
-#	print(*i,sep="|")
 def actualizarDisponibles(tablero):
 	listaDisponibles=[]
 	listaOcupados=[]
@@ -51,9 +49,6 @@ def actualizarDisponibles(tablero):
 			j+=1
 		i+=1
 	return (listaDisponibles,listaOcupados)
-#datos=actualizarDisponibles(generarTablero(tamañoDeTablero(lista)))
-#for i in datos[0]:
-#	print(*i,sep="|")
 def verificarIntersecciones(signoX,signoY,palabra,pos,datos):
 	m=1
 	b=True
@@ -138,13 +133,11 @@ def agregarPalabra(tablero,palabra):
 	tamaño=len(tablero)
 	datos=actualizarDisponibles(tablero)
 	pos=elegirAlazar(datos[0])
-	#posicion=datos[0][2]	
 	sentido=randint(0,1)
 	direccion=randint(0,3)
 	posver=verificarPosicion(sentido,direccion,pos,datos,palabra,tamaño)
         
 	while posver==False:
-		#return agregarPalabra(tablero,palabra)
 		pos=elegirAlazar(datos[0])
 		posver=verificarPosicion(sentido,direccion,pos,datos,palabra,tamaño)
 	if direccion==0:
@@ -177,11 +170,6 @@ def agregarPalabra(tablero,palabra):
 				tablero[pos[0]+x][pos[1]-x]=palabra[x]
 	return tablero
 
-#datos=generarTablero(tamañoDeTablero(lista))
-#nose=agregarPalabra(datos,"casa")
-#for i in nose:
-#	print(*i,sep="|")
-
 def crearSopaDeLetras(lista,tablero):
 	for x in lista:
 		tablero=agregarPalabra(tablero,x)
@@ -193,7 +181,7 @@ for i in nose1:
 	print(*i,sep="|")
 
 def letraAlAzar():
-	lista=["a","b","c","d","e"]
+	lista=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 	if len(lista)==1:
 		return lista[0]
 	else:
