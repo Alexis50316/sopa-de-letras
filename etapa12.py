@@ -236,4 +236,166 @@ def sopaDeLetras():
 		archivo.write("\n")
 	archivo.close()
 
-sopaDeLetras()
+def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
+
+	diagonalIzquierdaNegativa=True
+	diagonalDerechaPositiva=True
+	diagonalIzquierdaPositiva=True
+	diagonalDerechaNegativa=True
+	verticalPositivo=True
+	verticalNegativo=True
+	horizontalPositivo=True
+	horizontalNegativo=True
+
+	
+
+	if (i+(len(palabra)-1))>(len(SopaDeLetras)) or (j-(len(palabra)-1))<0:
+		diagonalIzquierdaNegativa=False
+	if i+(len(palabra)-1)>(len(SopaDeLetras)-1) or j+(len(palabra)-1)>(len(SopaDeLetras)-1):
+		diagonalDerechaPositiva=False
+	if j+(len(palabra)-1)>(len(SopaDeLetras)-1) or i-(len(palabra)-1)<0:
+		diagonalIzquierdaPositiva=False
+	if j-(len(palabra)-1)<0 or i-(len(palabra)-1)<0:
+		diagonalDerechaNegativa=False
+	if i+(len(palabra)-1)>(len(SopaDeLetras)-1):
+		verticalPositivo=False
+
+	if i-(len(palabra)-1)<0:
+		verticalNegativo=False
+
+	if j+(len(palabra)-1)>(len(SopaDeLetras)-1):
+		horizontalPositivo=False
+
+	if j-(len(palabra)-1)<0:
+		horizontalNegativo=False
+
+	if verticalPositivo==True:
+		posp=1
+		while posp<len(palabra):
+			if SopaDeLetras[i+posp][j]==palabra[posp]:
+				posp+=1
+			else:
+				verticalPositivo=False
+				posp=len(palabra)
+		if verticalPositivo==True:
+			return (True,"vertical","Positiva")
+	if verticalNegativo==True:
+		posp=1
+		while posp < len(palabra):
+			if SopaDeLetras[i-posp][j]==palabra[posp]:
+				posp+=1
+			else:
+				verticalNegativo=False
+				posp=len(palabra)
+		if verticalNegativo==True:
+			return (True,"vertical","Negativa")
+	if horizontalPositivo==True:
+		posp=1
+		while posp < len(palabra):
+			if SopaDeLetras[i][j+posp]==palabra[posp]:
+				posp+=1
+			else:
+				horizontalPositivo=False
+				posp=len(palabra)
+		if horizontalPositivo==True:
+			return (True,"horizontal","Positiva")
+	if horizontalNegativo==True:
+		posp=1
+		while posp < len(palabra):
+			if SopaDeLetras[i][j-posp]==palabra[posp]:
+ 				posp+=1
+			else:
+				horizontalNegativo=False
+				posp=len(palabra)
+		if horizontalNegativo==True:
+			return (True,"horizontal","Negativa")
+
+	if diagonalIzquierdaPositiva==True:
+		posp=1
+		while posp < len(palabra):
+			if SopaDeLetras[i-posp][j+posp]==palabra[posp]:
+				posp+=1
+			else:
+				diagonalIzquierdaPositiva=False
+				posp=len(palabra)
+		if diagonalIzquierdaPositiva==True:
+			return (True,"diagonalIzquierda","Positiva")
+	if diagonalIzquierdaNegativa==True:
+		posp=1
+		while posp < len(palabra):
+			if SopaDeLetras[i+posp][j-posp]==palabra[posp]:
+				posp+=1
+			else:
+				diagonalIzquierdaNegativa=False
+				posp=len(palabra)
+		if diagonalIzquierdaNegativa==True:
+			return (True,"diagonalIzquierda","Negativa")
+	if diagonalDerechaNegativa==True:
+		posp=1
+		while posp < len(palabra):
+			if SopaDeLetras[i-posp][j-posp]==palabra[posp]:
+				posp+=1
+			else:
+				diagonalDerechaNegativa=False
+				posp=len(palabra)
+		if diagonalDerechaNegativa==True:
+			return (True,"diagonalDerecha","Negativa")
+	if diagonalDerechaPositiva==True:
+		posp=1
+		while posp < len(palabra):
+			if SopaDeLetras[i+posp][j+posp]==palabra[posp]:
+				posp+=1
+			else:
+				diagonalDerechaPositiva=False
+				posp=len(palabra)
+		if diagonalDerechaPositiva==True:
+			return (True,"diagonalDerecha","positiva")
+        
+
+	return (False,"","")
+
+def leerSopa():
+	a=input("ingrese el nombre de el archivo donde se encuentra la sopa seguido de .txt: ")
+	archivo=open(a,"r")
+	d2=[]
+	pos=0
+	for linea in archivo.readlines():
+		d2.append([])
+		for i in linea:
+			if i!="\n":
+				d2[pos].append(i)
+		pos+=1
+	archivo.close()
+	return d2
+
+def resolverSopa():
+	SopaDeLetras=leerSopa()
+	listaDePalabras=leerLista(input("ingrese el nombre del archivo donde se encuentra la lista de palabras seguido de .txt: "))
+	listaDeSolucion=[]
+	for l in listaDePalabras:
+		i=0
+		buscar=True
+		while i<(len(SopaDeLetras)) and buscar==True:
+			j=0
+			while j <(len(SopaDeLetras)) and buscar==True:
+				if l[0]==SopaDeLetras[i][j]:
+					valor=laPalabraEsCorrecta(l,SopaDeLetras,i,j)
+					if valor[0]:
+						listaDeSolucion+=[(l,(i,j),valor[1],valor[2])]
+						buscar=False
+					j+=1
+				else:
+					j+=1
+			i+=1
+	
+	for i in listaDeSolucion:
+		print(i[0],"se encuentra en posicion ",i[1][0],"|",i[1][1],"en direccion ",i[2],"con sentido ",i[3])
+
+def menu():
+	opcion=input("ingrese 1 para crear una sopa de letras o 2 para verificar una sopa existente: ")
+	if opcion=="1":
+		return sopaDeLetras()
+	else:
+		return resolverSopa()     
+
+menu()
