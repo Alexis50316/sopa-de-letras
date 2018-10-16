@@ -9,7 +9,26 @@ from random import *
 
 """
 lista=["nose","casa","vaca","burro","auto","perro"]
-
+def crearLista():
+	archivo = open("palabras.txt" ,"w")
+	can=int(input("ingrese la cantidad de palabras que desea ingresar: "))
+	for x in range(can):
+		l=input("ingrese la palabra a agregar: ")
+		archivo.write(l+"\n")
+	archivo.close()
+	
+def leerLista():
+	a=input("ingrese direccion del archivo: ")
+	archivo=open(a,"r")
+	lista=[]
+	for linea in archivo.readlines():
+		string=""
+		for i in linea:
+			if i!="\n":
+				string+=i
+		lista+=[string]
+	archivo.close() 
+	return lista
 
 def tamañoDeTablero(lista):
 	cantidadDeLetras=0
@@ -192,7 +211,12 @@ def rellenarTablero(tablero):
 	return tablero
 
 
-def sopaDeLetras(lista):
+def sopaDeLetras():
+	opcion=input("ingrese 1 para crear un archivo con las palabras o 2 para abrir un archivo: ")
+	if opcion=="1":
+		lista=crearLista()
+	else:
+		lista=leerLista()
 	tam=tamañoDeTablero(lista)
 	tablero=generarTablero(tam)
 	tableroconpalabras=crearSopaDeLetras(lista,tablero)
@@ -203,5 +227,11 @@ def sopaDeLetras(lista):
 	print(' ')
 	for i in tablerocompleto:
 		print(*i,sep="|")
+	archivo=open("sopa.txt","w")
+		for x in tablerocompleto:
+			for l in x:
+				archivo.write(l)
+			archivo.write("\n")
+	archivo.close()
 
 sopaDeLetras(lista)
