@@ -10,6 +10,9 @@ from random import *
 	una sopa de letras.
 		
 """
+#crearLista: None -> String
+#recibe un nombre en forma de string a traves de input, crea una lista de palabras
+#ingresadas por el usuario en un archivo con ese nombre y devuelve el nombre
 def crearLista():
 	nombre=input("elija el nombre del archivo donde se guardara la lista terminando con .txt: ")
 	archivo = open(nombre,"w")
@@ -19,7 +22,10 @@ def crearLista():
 		archivo.write(l+"\n")
 	archivo.close()
 	return nombre
-	
+
+#leerLista: String -> List
+#recibe el nombre de un archivo en forma de string
+#y devuelve una lista con las palabras del archivo
 def leerLista(a):
 	archivo=open(a,"r")
 	lista=[]
@@ -32,6 +38,9 @@ def leerLista(a):
 	archivo.close() 
 	return lista
 
+#tamañoDeTablero: List -> Int
+#recibe una lista de palabras y en base a ella calcula el tamaño del
+#tablero de la sopa a crear
 def tamañoDeTablero(lista):
 	cantidadDeLetras=0
 	cantidadDePalabras=0
@@ -49,6 +58,9 @@ def tamañoDeTablero(lista):
 		tamaño=((int(math.sqrt(cantidadDeLetras)))*2)
 	return tamaño
 
+#generarTablero: Int -> List
+#recibe un tamaño n en forma de entero
+#y crea una lista de n listas de n elementos " "
 def generarTablero(tamaño):
 	l=[]
 	for i in range(tamaño):
@@ -56,46 +68,57 @@ def generarTablero(tamaño):
 		for j in range(tamaño):
 			l[i].append(" ")
 	return l
+
+#actualizarDisponibles: List -> List
+#recibe la lista del tablero y devuelve
+#una lista de las posiciones disponibles para agregar palabras
 def actualizarDisponibles(tablero):
 	listaDisponibles=[]
-	listaOcupados=[]
 	i=0
 	for x in tablero:
 		j=0
 		for y in x:
 			if y==" ":
 				listaDisponibles.append((i,j))
-			else:
-				listaOcupados.append((i,j))
 			j+=1
 		i+=1
-	return (listaDisponibles,listaOcupados)
+	return listaDisponibles
+
+#verificarIntersecciones: String String String Tupla List -> Boolean
+#recibe la palabra que se quiere agregar, posicion, sentido (en forma de signos)
+#y la lista de posiciones disponibles y devuelve si se puede ubicar la palabra o no en esa posicion
 def verificarIntersecciones(signoX,signoY,palabra,pos,datos):
 	m=1
 	b=True
 	while m<len(palabra) and b==True:
 		if signoX=="mas" and signoY=="menos":
-			b=(pos[0]+m,pos[1]-m) in datos[0]
+			b=(pos[0]+m,pos[1]-m) in datos
 		elif signoX=="mas" and signoY=="mas":
-			b=(pos[0]+m,pos[1]+m) in datos[0]
+			b=(pos[0]+m,pos[1]+m) in datos
 		elif signoX=="menos" and signoY=="mas":
-			b=(pos[0]-m,pos[1]+m) in datos[0]
+			b=(pos[0]-m,pos[1]+m) in datos
 		elif signoX=="menos" and signoY=="menos":
-			b=(pos[0]-m,pos[1]-m) in datos[0]
+			b=(pos[0]-m,pos[1]-m) in datos
 		elif signoX=="nulo" and signoY=="mas":
-			b=(pos[0],pos[1]+m) in datos[0]
+			b=(pos[0],pos[1]+m) in datos
 		elif signoX=="nulo" and signoY=="menos":
-			b=(pos[0],pos[1]-m) in datos[0]
+			b=(pos[0],pos[1]-m) in datos
 		elif signoX=="menos" and signoY=="nulo":
-			b=(pos[0]-m,pos[1]) in datos[0]
+			b=(pos[0]-m,pos[1]) in datos
 		else:
-			b=(pos[0]+m,pos[1]) in datos[0]
+			b=(pos[0]+m,pos[1]) in datos
 		m=m+1
 	if b==True:
 		return b
 	else:
 		return b
-def verificarPosicion(sen,dire,pos,datos,palabra,tam):
+
+#verificarPosicion: String Int Int Tupla List Int -> Boolean
+#recibe una palabra con la direccion (0 horizontal, 1 vertical, 2 diagonal derecha y 3 diagonal izquierda),
+#sentido (0 sentido normal y 1 sentido contrario) y posicion donde se quiere ubicar,
+#mas la lista de posiciones disponibles y el tamaño del tablero
+#y devuelve si se puede ubicar o no
+def verificarPosicion(palabra,sen,dire,pos,datos,tam):
 	if dire==0:
 		if sen==0:
 			if tam-pos[1]>len(palabra):
@@ -142,25 +165,29 @@ def verificarPosicion(sen,dire,pos,datos,palabra,tam):
 				return verificarIntersecciones("mas","menos",palabra,pos,datos)
 			else:
 				return False		
-							
+
+#elegirAlazar: list --> tupla
+#recibe una lista de posiciones disponibles y elige una posicion al azar							
 def elegirAlazar(lista):
 	if len(lista)==1:
 		return lista[0]
 	else:
 		pos=randint(0,len(lista)-1)
 		return lista[pos]
-
+#agregarPalabra: Lista String -> List
+#recibe un tablero en forma de lista de listas y una palabra y devuelve
+#el tablero con la palabra agregada
 def agregarPalabra(tablero,palabra):
 	tamaño=len(tablero)
 	datos=actualizarDisponibles(tablero)
-	pos=elegirAlazar(datos[0])
+	pos=elegirAlazar(datos)
 	sentido=randint(0,1)
 	direccion=randint(0,3)
-	posver=verificarPosicion(sentido,direccion,pos,datos,palabra,tamaño)
+	posver=verificarPosicion(palabra,sentido,direccion,pos,datos,tamaño)
         
 	while posver==False:
-		pos=elegirAlazar(datos[0])
-		posver=verificarPosicion(sentido,direccion,pos,datos,palabra,tamaño)
+		pos=elegirAlazar(datos)
+		posver=verificarPosicion(palabra,sentido,direccion,pos,datos,tamaño)
 	if direccion==0:
 		if sentido==0:
 			for x in range(0,len(palabra)):
@@ -191,11 +218,16 @@ def agregarPalabra(tablero,palabra):
 				tablero[pos[0]+x][pos[1]-x]=palabra[x]
 	return tablero
 
+#crearSopaDeLetras: List List -> List
+#recibe un tablero de la forma de lista de listas y una lista de palabras 
+#y devuelve tablero con todas las palabras de la lista agregadas
 def crearSopaDeLetras(lista,tablero):
 	for x in lista:
 		tablero=agregarPalabra(tablero,x)
 	return tablero
 
+#letraAlAzar: None -> String 
+#elige una letra al azar de una lista del alfabeto y nos las devuelve
 def letraAlAzar():
 	lista=['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 	if len(lista)==1:
@@ -204,6 +236,9 @@ def letraAlAzar():
 		pos=randint(0,len(lista)-1)
 		return lista[pos]
 
+#rellenarTablero: List -> List
+#recibe una lista de listas que representan un tablero y 
+#rellena los espacios vacios con letras
 
 def rellenarTablero(tablero):
 	for x in range(0,len(tablero)):
@@ -212,7 +247,9 @@ def rellenarTablero(tablero):
 				tablero[x][j]=letraAlAzar()
 	return tablero
 
-
+#sopaDeLetras: None -> None
+#permite al usuario elegir entre leer un archivo externo con palabras o crear uno
+#y en base a este crea una sopa de letras, luego la imprime y la guarda en otro archivo
 def sopaDeLetras():
 	opcion=input("ingrese 1 para crear un archivo con las palabras o 2 para abrir un archivo: ")
 	if opcion=="1":
@@ -235,9 +272,13 @@ def sopaDeLetras():
 			archivo.write(l)
 		archivo.write("\n")
 	archivo.close()
-
+#laPalabraEsCorrecta: String List Int Int -> Tupla
+#recibe una palabra , un tablero de sopa y una posicion representada por enteros
+#evalua la palabra en la posicion , eliminando las direcciones en la cual la palabra 
+#no entra , y luega pasa a evaluarla en las restantes con las posiciones siguientes
+#y devuelve una tupla con True , la direccion y sentido correcto si esta en esa posicion
+#o una tupla con False sino esta 
 def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
-
 	diagonalIzquierdaNegativa=True
 	diagonalDerechaPositiva=True
 	diagonalIzquierdaPositiva=True
@@ -246,9 +287,6 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 	verticalNegativo=True
 	horizontalPositivo=True
 	horizontalNegativo=True
-
-	
-
 	if (i+(len(palabra)-1))>(len(SopaDeLetras)) or (j-(len(palabra)-1))<0:
 		diagonalIzquierdaNegativa=False
 	if i+(len(palabra)-1)>(len(SopaDeLetras)-1) or j+(len(palabra)-1)>(len(SopaDeLetras)-1):
@@ -278,7 +316,7 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 				verticalPositivo=False
 				posp=len(palabra)
 		if verticalPositivo==True:
-			return (True,"vertical","Positiva")
+			return (True,"vertical","positivo")
 	if verticalNegativo==True:
 		posp=1
 		while posp < len(palabra):
@@ -288,7 +326,7 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 				verticalNegativo=False
 				posp=len(palabra)
 		if verticalNegativo==True:
-			return (True,"vertical","Negativa")
+			return (True,"vertical","negativo")
 	if horizontalPositivo==True:
 		posp=1
 		while posp < len(palabra):
@@ -298,7 +336,7 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 				horizontalPositivo=False
 				posp=len(palabra)
 		if horizontalPositivo==True:
-			return (True,"horizontal","Positiva")
+			return (True,"horizontal","positivo")
 	if horizontalNegativo==True:
 		posp=1
 		while posp < len(palabra):
@@ -308,7 +346,7 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 				horizontalNegativo=False
 				posp=len(palabra)
 		if horizontalNegativo==True:
-			return (True,"horizontal","Negativa")
+			return (True,"horizontal","negativo")
 
 	if diagonalIzquierdaPositiva==True:
 		posp=1
@@ -319,7 +357,7 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 				diagonalIzquierdaPositiva=False
 				posp=len(palabra)
 		if diagonalIzquierdaPositiva==True:
-			return (True,"diagonalIzquierda","Positiva")
+			return (True,"diagonal izquierda","positivo")
 	if diagonalIzquierdaNegativa==True:
 		posp=1
 		while posp < len(palabra):
@@ -329,7 +367,7 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 				diagonalIzquierdaNegativa=False
 				posp=len(palabra)
 		if diagonalIzquierdaNegativa==True:
-			return (True,"diagonalIzquierda","Negativa")
+			return (True,"diagonal izquierda","negativo")
 	if diagonalDerechaNegativa==True:
 		posp=1
 		while posp < len(palabra):
@@ -339,7 +377,7 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 				diagonalDerechaNegativa=False
 				posp=len(palabra)
 		if diagonalDerechaNegativa==True:
-			return (True,"diagonalDerecha","Negativa")
+			return (True,"diagonal derecha","negativo")
 	if diagonalDerechaPositiva==True:
 		posp=1
 		while posp < len(palabra):
@@ -349,11 +387,14 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 				diagonalDerechaPositiva=False
 				posp=len(palabra)
 		if diagonalDerechaPositiva==True:
-			return (True,"diagonalDerecha","positiva")
+			return (True,"diagonal derecha","positivo")
         
 
 	return (False,"","")
 
+#leerSopa: None -> List 
+#abre un archivo a traves de input y tranforma ese archivo a un tablero
+# en forma de listas de listas
 def leerSopa():
 	a=input("ingrese el nombre de el archivo donde se encuentra la sopa seguido de .txt: ")
 	archivo=open(a,"r")
@@ -367,7 +408,7 @@ def leerSopa():
 		pos+=1
 	archivo.close()
 	return d2
-
+#
 def resolverSopa():
 	SopaDeLetras=leerSopa()
 	listaDePalabras=leerLista(input("ingrese el nombre del archivo donde se encuentra la lista de palabras seguido de .txt: "))
