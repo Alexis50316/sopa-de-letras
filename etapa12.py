@@ -3,16 +3,16 @@
 import math
 from random import *
 """
-	en la primer etapa:
+	en la primer opcion:
 		dada una lista de palabras tomadas de un archivo externo , crearemos una sopa de letra en base 
-	a dichas palabras. definiremos crearSopaDeLetras, la cual recibira un lista de palabras de un archivo 
-	o permitira al usuario crear un archivo con las palabras y retornara una lista de listas, representando 
-	una sopa de letras.
-	en la segunda etapa: 
+		a dichas palabras. definiremos crearSopaDeLetras, la cual recibira un lista de palabras de un archivo 
+		o permitira al usuario crear un archivo con las palabras y retornara una lista de listas, representando 
+		una sopa de letras.
+	en la segunda opcion: 
 		recibimos una sopa de letras representada por una lista de listas, y una lista de palabras las 
 		estan representadas por una lista , y buscamos todas las palabras en en la sopa de  letras.
 		y devolvemos en que posicion se encuentran , el sentido , y la direccion de cada palabra.
-	por ultimo creamos un menu en el cual el usuario pueda eleguir cual de estas etapas usar y de que manera hacerlo.
+	se accede a ellas a traves de un menu en el cual el usuario pueda elegir cual de estas opciones usar.
 		
 """
 #crearLista: None -> String
@@ -56,7 +56,6 @@ def tamañoDeTablero(lista):
 		cantidadDePalabras+=1
 		for j in i:
 			cantidadDeLetras+=1
-
 	if ((int(math.sqrt(cantidadDeLetras)))*2)<(longitudMaxima*2):
 		tamaño=longitudMaxima*2
 	else:
@@ -145,8 +144,7 @@ def verificarPosicion(palabra,sen,dire,pos,datos,tam):
 			if pos[0]>len(palabra):
 				return verificarIntersecciones("menos","nulo",palabra,pos,datos)
 			else:
-				return False		
-		
+				return False
 	elif dire==2:
 		if sen==0:
 			if tam-pos[0]>len(palabra) and tam-pos[1]>len(palabra):
@@ -157,8 +155,7 @@ def verificarPosicion(palabra,sen,dire,pos,datos,tam):
 			if pos[0]>len(palabra) and pos[1]>len(palabra):
 				return verificarIntersecciones("menos","menos",palabra,pos,datos)
 			else:
-				return False		
-				
+				return False	
 	else:
 		if sen==0:
 			if pos[0]>len(palabra) and tam-pos[1]>len(palabra):
@@ -171,7 +168,7 @@ def verificarPosicion(palabra,sen,dire,pos,datos,tam):
 			else:
 				return False		
 
-#elegirAlazar: list --> tupla
+#elegirAlazar: List -> Tupla
 #recibe una lista de posiciones disponibles y elige una posicion al azar							
 def elegirAlazar(lista):
 	if len(lista)==1:
@@ -179,6 +176,7 @@ def elegirAlazar(lista):
 	else:
 		pos=randint(0,len(lista)-1)
 		return lista[pos]
+
 #agregarPalabra: Lista String -> List
 #recibe un tablero en forma de lista de listas y una palabra y devuelve
 #el tablero con la palabra agregada
@@ -244,7 +242,6 @@ def letraAlAzar():
 #rellenarTablero: List -> List
 #recibe una lista de listas que representan un tablero y 
 #rellena los espacios vacios con letras
-
 def rellenarTablero(tablero):
 	for x in range(0,len(tablero)):
 		for j in range(0,len(tablero)):
@@ -277,6 +274,7 @@ def sopaDeLetras():
 			archivo.write(l)
 		archivo.write("\n")
 	archivo.close()
+
 #laPalabraEsCorrecta: String List Int Int -> Tupla
 #recibe una palabra , un tablero de sopa y una posicion representada por enteros
 #evalua la palabra en la posicion , eliminando las direcciones en la cual la palabra 
@@ -302,16 +300,12 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 		diagonalDerechaNegativa=False
 	if i+(len(palabra)-1)>(len(SopaDeLetras)-1):
 		verticalPositivo=False
-
 	if i-(len(palabra)-1)<0:
 		verticalNegativo=False
-
 	if j+(len(palabra)-1)>(len(SopaDeLetras)-1):
 		horizontalPositivo=False
-
 	if j-(len(palabra)-1)<0:
 		horizontalNegativo=False
-
 	if verticalPositivo==True:
 		posp=1
 		while posp<len(palabra):
@@ -393,8 +387,6 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 				posp=len(palabra)
 		if diagonalDerechaPositiva==True:
 			return (True,"diagonal derecha","positivo")
-        
-
 	return (False,"","")
 
 #leerSopa: None -> List 
@@ -413,7 +405,10 @@ def leerSopa():
 		pos+=1
 	archivo.close()
 	return d2
-#
+
+#resolverSopa: None -> None
+#abre una sopa de letras y una lista de palabras que estan en la sopa desde archivos externos, 
+#e imprime la posicion, direccion y sentido que tiene cada palabra en la sopa
 def resolverSopa():
 	SopaDeLetras=leerSopa()
 	listaDePalabras=leerLista(input("ingrese el nombre del archivo donde se encuentra la lista de palabras seguido de .txt: "))
@@ -433,12 +428,14 @@ def resolverSopa():
 				else:
 					j+=1
 			i+=1
-	
 	for i in listaDeSolucion:
 		print(i[0],"se encuentra en posicion ",i[1][0],"|",i[1][1],"en direccion ",i[2],"con sentido ",i[3])
 
+#menu: None -> None
+#recibe la opcion que el usuario desea realizar, 1 para crear una sopa o 2 para resolver una sopa
+#y llama a la funcion correspondiente
 def menu():
-	opcion=input("ingrese 1 para crear una sopa de letras o 2 para verificar una sopa existente: ")
+	opcion=input("ingrese 1 para crear una sopa de letras o 2 para resolver una sopa existente: ")
 	if opcion=="1":
 		return sopaDeLetras()
 	else:
