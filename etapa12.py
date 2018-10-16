@@ -3,11 +3,16 @@
 import math
 from random import *
 """
-	en esta etapa dada una lista de palabras tomadas de un archivo externo , crearemos una sopa de letra en base 
-	a dichas palabras
-	definiremos crearSopaDeLetras, la cual recibira un lista de palabras de un archivo 
+	en la primer etapa:
+		dada una lista de palabras tomadas de un archivo externo , crearemos una sopa de letra en base 
+	a dichas palabras. definiremos crearSopaDeLetras, la cual recibira un lista de palabras de un archivo 
 	o permitira al usuario crear un archivo con las palabras y retornara una lista de listas, representando 
 	una sopa de letras.
+	en la segunda etapa: 
+		recibimos una sopa de letras representada por una lista de listas, y una lista de palabras las 
+		estan representadas por una lista , y buscamos todas las palabras en en la sopa de  letras.
+		y devolvemos en que posicion se encuentran , el sentido , y la direccion de cada palabra.
+	por ultimo creamos un menu en el cual el usuario pueda eleguir cual de estas etapas usar y de que manera hacerlo.
 		
 """
 #crearLista: None -> String
