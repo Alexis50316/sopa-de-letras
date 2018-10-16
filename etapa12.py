@@ -230,10 +230,10 @@ def sopaDeLetras():
 	for i in tablerocompleto:
 		print(*i,sep="|")
 	archivo=open("sopa.txt","w")
-		for x in tablerocompleto:
-			for l in x:
-				archivo.write(l)
-			archivo.write("\n")
+	for x in tablerocompleto:
+		for l in x:
+			archivo.write(l)
+		archivo.write("\n")
 	archivo.close()
 
-sopaDeLetras(lista)
+sopaDeLetras()
