@@ -1,24 +1,26 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import math
 from random import *
 """
-	en esta etapa dada una lista de palabras tomadas de un archivo esterno , crearemos una sopa de letra en base 
+	en esta etapa dada una lista de palabras tomadas de un archivo externo , crearemos una sopa de letra en base 
 	a dichas palabras
-	definiremos crearSopaDeLetras, la cual recibira un lista de palabas y retornara una lista de listas , representando 
+	definiremos crearSopaDeLetras, la cual recibira un lista de palabras de un archivo 
+	o permitira al usuario crear un archivo con las palabras y retornara una lista de listas, representando 
 	una sopa de letras.
-		crearSopaDeLetras: lista(string)--> lista(listas(string))
-
+		
 """
-lista=["nose","casa","vaca","burro","auto","perro"]
 def crearLista():
-	archivo = open("palabras.txt" ,"w")
+	nombre=input("elija el nombre del archivo donde se guardara la lista terminando con .txt: ")
+	archivo = open(nombre,"w")
 	can=int(input("ingrese la cantidad de palabras que desea ingresar: "))
 	for x in range(can):
 		l=input("ingrese la palabra a agregar: ")
 		archivo.write(l+"\n")
 	archivo.close()
+	return nombre
 	
-def leerLista():
-	a=input("ingrese direccion del archivo: ")
+def leerLista(a):
 	archivo=open(a,"r")
 	lista=[]
 	for linea in archivo.readlines():
@@ -214,9 +216,9 @@ def rellenarTablero(tablero):
 def sopaDeLetras():
 	opcion=input("ingrese 1 para crear un archivo con las palabras o 2 para abrir un archivo: ")
 	if opcion=="1":
-		lista=crearLista()
+		lista=leerLista(crearLista())
 	else:
-		lista=leerLista()
+		lista=leerLista(input("ingrese el nombre del archivo con .txt: "))
 	tam=tamañoDeTablero(lista)
 	tablero=generarTablero(tam)
 	tableroconpalabras=crearSopaDeLetras(lista,tablero)
