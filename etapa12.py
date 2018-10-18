@@ -23,15 +23,14 @@ import os.path as path
 #--> comienzo de el codigo de la etapa 1:
 
 def crearLista():
-	nombre1=input("elija el nombre del archivo donde se guardara la lista: ")
+	nombre1=input("Elija el nombre del archivo donde se guardara la lista: ")
 	nombre=nombre1+".txt"
 	archivo = open(nombre,"w")
-	can=int(input("ingrese la cantidad de palabras que desea ingresar: "))
-	while type(can)!=int or can<=0:
-		can=int(input("ingrese la cantidad de palabras que desea ingresar: "))
-
-	for x in range(can):
-		l=input("ingrese la palabra a agregar: ")
+	can=input("Ingrese la cantidad de palabras que desea ingresar: ")
+	while not can.isdecimal() or int(can)<=0:
+		can=input("Ingrese la cantidad de palabras que desea ingresar: ")
+	for x in range(int(can)):
+		l=input("Ingrese la palabra a agregar: ")
 		archivo.write(l+"\n")
 	archivo.close()
 	return nombre1
@@ -45,7 +44,7 @@ def leerLista(a):
 		archivo=open(a,"r")
 	else:
 		while path.exists(a)==False:
-			a=input("ingrese el nombre de el archivo: ")
+			a=input("Ingrese el nombre de el archivo: ")
 			a+=".txt"
 	archivo=open(a,"r")
 	lista=[]
@@ -159,14 +158,14 @@ def verificarIntersecciones(signoX,signoY,palabra,pos,datos):
 		return b
 
 def test_verificarIntersecciones():
-	#es correcto porque no se sale de rango y todas las posiciones estan disponibles
 	assert verificarIntersecciones("mas","nulo","casa",(1,1),[(2,1),(3,1),(5,5),(4,1),(5,1)])==(True)
-	#el ejemplo de abajo falla porque se va fuera de rango
+	#es correcto porque no se sale de rango y todas las posiciones estan disponibles
 	assert verificarIntersecciones("mas","menos","casa",(0,0),[(1,1),(1,2),(1,3)])==(False)
 	#el ejemplo de abajo falla porque se va fuera de rango
 	assert verificarIntersecciones("nulo","menos","casa",(0,2),[(0,0),(0,1),(0,3)])==(False)
-	#falla porque una de las posiciones no esta disponible 
+	#el ejemplo de abajo falla porque se va fuera de rango
 	assert verificarIntersecciones("mas","mas","casa",(0,0),[(1,1),(2,2),(4,4),(1,2),(0,2)])==(False)
+	#falla porque una de las posiciones no esta disponible 
 
 #verificarPosicion: String Int Int Tupla List Int -> Boolean
 #recibe una palabra con la direccion (0 horizontal, 1 vertical, 2 diagonal derecha y 3 diagonal izquierda),
@@ -220,14 +219,14 @@ def verificarPosicion(palabra,sen,dire,pos,datos,tam):
 				return False	
 
 def test_verificarPosicion():
-	#es correcto porque las pociciones en la direccion y el sentido indicado estan disponibles.
 	assert verificarPosicion("casa",0,1,(1,1),[(2,1),(3,1),(5,5),(4,1),(5,1)],8)==(True)
-	#el ejemplo de abajo falla porque se va fuera de rango
+	#es correcto porque las pociciones en la direccion y el sentido indicado estan disponibles.
 	assert verificarPosicion("casa",1,3,(0,0),[(1,1),(1,2),(1,3)],10)==(False)
-	#el ejemplo de abajo falla porque se va fuera de rango
+	#falla porque se va fuera de rango
 	assert verificarPosicion("casa",1,0,(0,2),[(0,0),(0,1),(0,3)],10)==(False)
+	#falla porque se va fuera de rango
+	assert verificarPosicion("casa",0,2,(0,0),[(1,1),(2,2),(4,4),(1,2),(0,2)],8)==(False)
 	#falla porque una de las posiciones no esta disponible 
-	assert verificarPosicion("casa",0,2,(0,0),[(1,1),(2,2),(4,4),(1,2),(0,2)],8)==(False)	
 
 #elegirAlazar: List -> Tupla
 #recibe una lista de posiciones disponibles y elige una posicion al azar							
@@ -325,11 +324,11 @@ def rellenarTablero(tablero):
 #permite al usuario elegir entre leer un archivo externo con palabras o crear uno
 #y en base a este crea una sopa de letras, luego la imprime y la guarda en otro archivo
 def sopaDeLetras():
-	opcion=input("ingrese 1 para crear un archivo con las palabras o 2 para abrir un archivo: ")
+	opcion=input("Ingrese 1 para crear un archivo con las palabras o 2 para abrir un archivo: ")
 	if opcion=="1":
 		lista=leerLista(crearLista())
 	else:
-		lista=leerLista(input("ingrese el nombre del archivo: "))
+		lista=leerLista(input("Ingrese el nombre del archivo donde se encuentran las palabras: "))
 	tam=tamañoDeTablero(lista)
 	tablero=generarTablero(tam)
 	tableroconpalabras=crearSopaDeLetras(lista,tablero)
@@ -340,7 +339,7 @@ def sopaDeLetras():
 	print(' ')
 	for i in tablerocompleto:
 		print(*i,sep="|")
-	sopa=input("ingrese el nombre con el que desea guardar el archivo: ")
+	sopa=input("Ingrese el nombre con el que desea guardar el archivo de la sopa: ")
 	sopa+=".txt"	
 	archivo=open(sopa,"w")
 	for x in tablerocompleto:
@@ -349,7 +348,7 @@ def sopaDeLetras():
 		archivo.write("\n")
 	archivo.close()
 
-#--> comienzo de el codigo de la etapa 2:
+#--> comienzo del codigo de la etapa 2:
 
 #laPalabraEsCorrecta: String List Int Int -> Tupla
 #recibe una palabra , un tablero de sopa y una posicion representada por enteros
@@ -465,17 +464,25 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 			return (True,"diagonal derecha","normal")
 	return (False,"","")
 
+def test_laPalabraEsCorrecta():
+	assert laPalabraEsCorrecta("dia",[["d","a","l"],["i","s","m"],["a","d","j"]],1,1)==((True,"vertical","normal"))
+	assert laPalabraEsCorrecta("mi",[["i","f"],["g","m"]],1,2)==((True,"diagonal izquierda","inversa"))
+	assert laPalabraEsCorrecta("dar",[["f","u","o"],["d","a","r"],["g","l","z"]],3,2)==((False,"","",""))
+	#falla porque el indice esta fuera de rango
+	assert laPalabraEsCorrecta("hola",[["a"]],1,1)==((False,"",""))
+	#falla porque la palabra es muy grande para el tablero
+
 #leerSopa: None -> List 
 #abre un archivo a traves de input y tranforma ese archivo a un tablero
 # en forma de listas de listas
 def leerSopa():
-	a=input("ingrese el nombre de el archivo donde se encuentra la sopa: ")
+	a=input("Ingrese el nombre de el archivo donde se encuentra la sopa: ")
 	a+=".txt"
 	if path.exists(a):
 		archivo=open(a,"r")
 	else:
 		while path.exists(a)==False:
-			a=input("ingrese el nombre de el archivo: ")
+			a=input("No existe ese archivo. Ingrese el nombre de el archivo donde se encentra la sopa: ")
 			a+=".txt"
 	archivo=open(a,"r")
 	d2=[]
@@ -494,36 +501,43 @@ def leerSopa():
 #e imprime la posicion, direccion y sentido que tiene cada palabra en la sopa
 def resolverSopa():
 	SopaDeLetras=leerSopa()
-	listaDePalabras=leerLista(input("ingrese el nombre del archivo donde se encuentra la lista de palabras seguido de .txt: "))
+	listaDePalabras=leerLista(input("Ingrese el nombre del archivo donde se encuentran las palabras: "))
 	listaDeSolucion=[]
-	for l in listaDePalabras:
-		i=0
-		buscar=True
-		while i<(len(SopaDeLetras)) and buscar==True:
-			j=0
-			while j <(len(SopaDeLetras)) and buscar==True:
-				if l[0]==SopaDeLetras[i][j]:
-					valor=laPalabraEsCorrecta(l,SopaDeLetras,i,j)
-					if valor[0]:
-						listaDeSolucion+=[(l,(i,j),valor[1],valor[2])]
-						buscar=False
-					j+=1
-				else:
-					j+=1
-			i+=1
-	for i in listaDeSolucion:
-		print(i[0],"se encuentra en posicion ",i[1][0],"|",i[1][1],"en direccion ",i[2],"con sentido ",i[3])
+	if tamañoDeTablero(listaDePalabras)==len(SopaDeLetras):
+		for l in listaDePalabras:
+			i=0
+			buscar=True
+			while i<(len(SopaDeLetras)) and buscar==True:
+				j=0
+				while j <(len(SopaDeLetras)) and buscar==True:
+					if l[0]==SopaDeLetras[i][j]:
+						valor=laPalabraEsCorrecta(l,SopaDeLetras,i,j)
+						if valor[0]:
+							listaDeSolucion+=[(l,(i,j),valor[1],valor[2])]
+							buscar=False
+						j+=1
+					else:
+						j+=1
+				i+=1
+		for i in listaDeSolucion:
+			print(i[0],"se encuentra en posicion ",i[1][0],"|",i[1][1],"en direccion ",i[2],"con sentido ",i[3])
+	else:
+		print("Las palabras de la lista no entran en la sopa de letras")
+		return resolverSopa()
 
 #menu: None -> None
 #recibe la opcion que el usuario desea realizar, 1 para crear una sopa o 2 para resolver una sopa
 #y llama a la funcion correspondiente
 def menu():
-	opcion=input("ingrese: \n 1 para crear una sopa de letras \n 2 para resolver una sopa existente \n 0 para salir \n ")
+	opcion=input("Ingrese: \n 1 para crear una sopa de letras \n 2 para resolver una sopa existente \n 0 para salir \n ")
+	while not opcion.isdecimal() or int(opcion)<0 or int(opcion)>2:
+		print("No existe esa opcion.")
+		menu()
 	while opcion!="0":
 		if opcion=="1":
 			sopaDeLetras()
 		elif opcion=="2":
 			resolverSopa()
-		opcion=input("ingrese: \n 1 para crear una sopa de letras \n 2 para resolver una sopa existente \n 0 para salir \n ")
+		opcion=input("Ingrese: \n 1 para crear una sopa de letras \n 2 para resolver una sopa existente \n 0 para salir \n ")
 
 menu()
