@@ -531,7 +531,6 @@ def resolverSopa():
 def menu():
 	opcion=input("Ingrese: \n 1 para crear una sopa de letras \n 2 para resolver una sopa existente \n 0 para salir \n ")
 	while not opcion.isdecimal() or int(opcion)<0 or int(opcion)>2:
-		print("No existe esa opcion.")
 		menu()
 	while opcion!="0":
 		if opcion=="1":
