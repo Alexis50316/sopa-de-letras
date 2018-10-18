@@ -513,7 +513,7 @@ def resolverSopa():
 					if l[0]==SopaDeLetras[i][j]:
 						valor=laPalabraEsCorrecta(l,SopaDeLetras,i,j)
 						if valor[0]:
-							listaDeSolucion+=[(l,(i,j),valor[1],valor[2])]
+							listaDeSolucion+=[(l,(i+1,j+1),valor[1],valor[2])]
 							buscar=False
 						j+=1
 					else:
