@@ -94,9 +94,9 @@ def generarTablero(tamaño):
 	return l
 
 def test_generarTablero():
-	assert generarTablero(2) == ([" "," "],[" "," "])
-	assert generarTablero(1) == ([" "])
-	assert generarTablero(2) == ([" "," "," "],[" "," "," "],[" "," "," "])
+	assert generarTablero(2) == ([[" "," "],[" "," "]])
+	assert generarTablero(1) == ([[" "]])
+	assert generarTablero(3) == ([[" "," "," "],[" "," "," "],[" "," "," "]])
 
 #actualizarDisponibles: List -> List
 #recibe la lista del tablero y devuelve
@@ -465,11 +465,9 @@ def laPalabraEsCorrecta(palabra,SopaDeLetras,i,j):
 	return (False,"","")
 
 def test_laPalabraEsCorrecta():
-	assert laPalabraEsCorrecta("dia",[["d","a","l"],["i","s","m"],["a","d","j"]],1,1)==((True,"vertical","normal"))
-	assert laPalabraEsCorrecta("mi",[["i","f"],["g","m"]],1,2)==((True,"diagonal izquierda","inversa"))
-	assert laPalabraEsCorrecta("dar",[["f","u","o"],["d","a","r"],["g","l","z"]],3,2)==((False,"","",""))
-	#falla porque el indice esta fuera de rango
-	assert laPalabraEsCorrecta("hola",[["a"]],1,1)==((False,"",""))
+	assert laPalabraEsCorrecta("mi",[["i","f","d","n"],["g","m","l","j"],["g","r","y","l"],["d","f","k","p"]],1,1)==((True,"diagonal derecha","inverso"))
+	#falla porque la palabra no esta
+	assert laPalabraEsCorrecta("hola",[["a"]],0,0)==((False,"",""))
 	#falla porque la palabra es muy grande para el tablero
 
 #leerSopa: None -> List 
