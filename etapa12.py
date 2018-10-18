@@ -20,7 +20,7 @@ import os.path as path
 #recibe un nombre en forma de string a traves de input, crea una lista de palabras
 #ingresadas por el usuario en un archivo con ese nombre y devuelve el nombre
 
-#--> comienzo de el codigo de la etapa 1:
+#--> comienzo del codigo de la etapa 1:
 
 def crearLista():
 	nombre1=input("Elija el nombre del archivo donde se guardara la lista: ")
